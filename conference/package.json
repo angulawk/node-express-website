@@ -1,0 +1,26 @@
+{
+  "name": "node_and_express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angulawk/node-express-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angulawk/node-express-website/issues"
+  },
+  "homepage": "https://github.com/angulawk/node-express-website#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "pug": "^2.0.4"
+  }
+}
