@@ -2,6 +2,11 @@ const express = require("express");
 const createError = require("http-errors");
 const app = express();
 const path = require("path");
+const configs = require("./config");
+const SpeakerService = require("./services/SpeakerService")
+
+const config = configs[app.get("env")];
+const speakerService = new SpeakerService(config.data.speakers);
 
 app.set("view engine", "pug");
 
@@ -10,14 +15,34 @@ if(app.get("env") === "development") {
 }
 
 app.set("views", path.join(__dirname, "./views"));
+app.locals.title = config.sitename;
+
+app.use((req, res, next) => {
+	res.locals.rendertime = new Date();
+	return next();
+})
 
 const routes = require("./routes");
 app.use(express.static("public"));
 app.get("/favicon.ico", (req, res, next) => {
   return res.sendStatus(204);
+});
+
+app.use(async (req, res, next) => {
+	try {
+		const names = await speakerService.getNames();
+
+		res.locals.speakerNames = names;
+		return next();
+	} catch(err) {
+		return next(err)
+	}
 })
 
-app.use("/", routes());
+app.use("/", routes({
+	speakerService
+}));
+
 app.use((req, res, next) => {
   return next(createError(404, "File not found"))
 });
@@ -32,6 +57,6 @@ app.use((err, req, res, next) => {
 	return res.render("error");
 });
 
-app.listen(3000);
+app.listen(3002);
 
 module.export = app; 

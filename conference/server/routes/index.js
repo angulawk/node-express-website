@@ -4,9 +4,16 @@ const router = express.Router();
 const speakersRoute = require("./speakers");
 const feedbackRoute = require("./feedback");
 
-module.exports = () => {
-    router.get("/", (req, res, next) => {
-        return res.render("index");
+module.exports = (param) => {
+    const { speakerService } = param;
+
+    router.get("/", async (req, res, next) => {
+        const speakersList = await speakerService.getListShort();
+
+        return res.render("index", {
+            page: "Home",
+            speakersList
+        });
     })
 
     router.use("/speakers", speakersRoute());
